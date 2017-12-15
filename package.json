@@ -1,0 +1,23 @@
+{
+  "name": "chatgroup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a316523235/chatGroup.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a316523235/chatGroup/issues"
+  },
+  "homepage": "https://github.com/a316523235/chatGroup#readme",
+  "dependencies": {
+    "request": "^2.83.0",
+    "weixinbot": "^0.7.1"
+  }
+}
