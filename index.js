@@ -11,12 +11,12 @@ bot.on('qrcode', dingTalk);
 
 bot.on('friend', (msg) => {
   console.log(msg.Member.NickName + ': ' + msg.Content);
-  // if((msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1) || msg.Content.indexOf('i厦门') > -1) {
-	// console.log('有进来' + msg.Content);  
-	// bot.sendText(msg.FromUserName, '这下有说是测试了');
-  // } else {
-	// console.log('没进来' + msg.Content);
-  // }
+  if((msg.Member.NickName == '福尔摩斯豆豆' && msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1) || msg.Content.indexOf('i厦门') > -1) {
+	console.log('有进来' + msg.Content);  
+	bot.sendText(msg.FromUserName, '这下有说是测试了');
+  } else {
+	console.log('没进来' + msg.Content);
+  }
 });
 
 function dingTalk(qrcode) {
