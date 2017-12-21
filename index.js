@@ -12,7 +12,8 @@ const testTipGroups = ["@@8504cd58af8da4944a65290a383eb099c82c55a02586e41594ef2c
 bot.on('qrcode', dingTalk);
 
 bot.on('friend', (msg) => {
-  console.log("发送给：" + msg.FromUserName);  
+  console.log("发起人：" + msg.FromUserName);
+  console.log("发送至：" + msg.ToUserName);
   var isTipGroup = testTipGroups.includes(msg.FromUserName);
   var isTipContent = (msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1) || msg.Content == "测试";
   console.log(msg.Member.NickName + '(' + isTipGroup.toString() + ' ' + isTipContent.toString() + '): ' + msg.Content);

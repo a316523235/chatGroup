@@ -1,6 +1,8 @@
 # chatGroup
 # https://www.cnblogs.com/fnng/p/5854875.html
 
+发起人
+冰：@3969c16193439de3d7d360e5831cb876
 
 -- 群
 臭傻逼：@@8504cd58af8da4944a65290a383eb099c82c55a02586e41594ef2cccb6be3edc
