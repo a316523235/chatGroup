@@ -26,6 +26,13 @@ function example2() {
 	});
 }
 
+function(shortUrl) {
+	driver.get('https://www.alimama.com/index.htm');
+	driver.wait(until.elementLocated(By.id('J_menu_login')), 30000);
+	driver.findElement(By.id('J_menu_login')).click();
+	var jQRCodeImgImg = driver.wait(until.elementLocated(By.id('J_QRCodeImg')));
+}
+
 //example1();
 example2();
 driver.quit();
