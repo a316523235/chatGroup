@@ -35,6 +35,15 @@ function test2() {
     .then(function (bs64) {
         console.log(bs64);
         console.log("data:image/png;base64,");
+        // var dataBuffer = new Buffer(base64, 'base64');
+        // console.log('dataBuffer是否是Buffer对象：' + Buffer.isBuffer(dataBuffer));
+        // fs.writeFile(path, dataBuffer, function (err) {//用fs写入文件
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log('写入成功！');
+        //     }
+        // });
     });
 }
 
