@@ -1,5 +1,6 @@
 # chatGroup
 # https://www.cnblogs.com/fnng/p/5854875.html
+# http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_WebElementPromise.html
 
 发起人
 冰：@3969c16193439de3d7d360e5831cb876
