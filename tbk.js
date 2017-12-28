@@ -61,6 +61,8 @@ function getTbkInfo3(shortUrl) {
 
 	// })
 	var _realyUrl = "";
+	var hasCoupon = false;
+	var couponValue = 0;
 
 
 	driver.get('https://pub.alimama.com/index.htm')
@@ -97,8 +99,56 @@ function getTbkInfo3(shortUrl) {
 		return driver.findElement(By.className('search-btn')).click();
 	})
 	.then(function() {
-		driver.wait(until.elementLocated(By.id('q333333')), 30000);
+		//find and click 立即推广
+		try
+		{
+			driver.wait(until.elementLocated(By.className('block-search-box')), 5000);
+		} catch(e) {
+			driver.findElement(By.id("yxjh")).click();
+			driver.wait(until.elementLocated(By.className('block-search-box')), 5000);
+		}
+
+		var box = driver.findElement(By.className('block-search-box'));
+		// try
+		// {
+		// 	var tagCoupon = box.findElement(By.className('tag-coupon'));
+		// 	hasCoupon = true;
+		// } catch(e) {
+		// 	console.log(hasCoupon ? "has coupon" : "not coupon");
+		// }
+		// console.log(hasCoupon ? "has coupon" : "not coupon");
+
+		var selectBtn = box.findElement(By.className("box-btn-left"));
+		return selectBtn.click();
 	})
+	.then(function() {
+		//find and click 设置推广位
+		console.log('find and click 设置推广位');
+		var bdialogFt = driver.wait(until.elementLocated(By.className('bdialog-ft')), 5000);
+		return bdialogFt.findElement(By.css('button[mx-click=submit]')).click();
+	})
+	.then(function() {
+		//find and click 淘口令tab
+		var magixVfCode = driver.wait(until.elementLocated(By.id('magix_vf_code')), 3000);
+		var taoKouLinBtn = magixVfCode.findElement(By.class('tab-nav')).findElement(By.css('li:contains(淘口令)'));
+		return taoKouLinBtn.click();
+	})
+	.then(function() {
+		//find and get 淘口令代码
+		if(hasCoupon) {
+			var clipboardTarget = driver.wait(until.elementLocated(By.id('clipboard-target')), 3000);
+			return clipboardTarget.getAttribute("value");
+		} else {
+			var clipboardTarget2 = driver.wait(until.elementLocated(By.id('clipboard-target-2')), 3000);
+			return clipboardTarget2.getAttribute("value");
+		}
+	})
+	.then(function(taoKouLinStr) {
+		console.log("las taoKouLin str : " + taoKouLinStr);
+	})
+	// .catch(function() {
+	// 	console.log("未找到相关商品");
+	// })
 }
 
 function login() {
@@ -123,12 +173,15 @@ function login() {
 			console.log(4);
 			console.log('here');
 			console.log(qrCodeUrl);
-			alimamaDingTalk(qrCodeUrl);
+			//alimamaDingTalk(qrCodeUrl);
 			driver.wait(until.urlContains('pub.alimama.com'), 60000);
 		})
 		.then(function() {
 			console.log(5);
 			resolve();
+		})
+		.catch(function() {
+			reject("登录淘宝客失败");
 		})
 	})
 }
