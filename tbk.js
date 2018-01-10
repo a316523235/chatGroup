@@ -9,26 +9,6 @@ var driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 
-function example1() {
-	driver.get('https://www.baidu.com');
-	driver.findElement(By.id('kw')).sendKeys('webdriver');
-	driver.findElement(By.id('su')).click();
-	driver.wait(until.titleIs('webdriver_百度搜索'), 1000);
-}
-
-function example2() {
-	driver.get('https://www.baidu.com');
-	var su = driver.findElement(By.id('su'));
-	su.getAttribute('value').then(function(value) {
-		console.log(value);
-		example1();
-		driver.findElement(By.id('s_tab')).getAttribute('class').then(function(value) {
-			console.log(value);
-		});
-		
-	});
-}
-
 function getTbkInfo2(shortUrl) {
 	driver.get('https://pub.alimama.com/index.htm')
 	.then(function() {
@@ -63,6 +43,7 @@ function getTbkInfo3(shortUrl) {
 	var _realyUrl = "";
 	var hasCoupon = false;
 	var couponValue = 0;
+	var blockSearchBox;
 
 
 	driver.get('https://pub.alimama.com/index.htm')
@@ -75,7 +56,8 @@ function getTbkInfo3(shortUrl) {
 		if(userName.indexOf('冰风沉醉') > -1) {
 			return pOK();
 		} else {
-			return login();
+			//return login();
+			return pOK();
 		}
 	})
 	.then(function() {
@@ -99,56 +81,115 @@ function getTbkInfo3(shortUrl) {
 		return driver.findElement(By.className('search-btn')).click();
 	})
 	.then(function() {
-		//find and click 立即推广
-		try
-		{
-			driver.wait(until.elementLocated(By.className('block-search-box')), 5000);
-		} catch(e) {
-			driver.findElement(By.id("yxjh")).click();
-			driver.wait(until.elementLocated(By.className('block-search-box')), 5000);
+		driver.wait(until.elementLocated(By.id("yxjh")), 5000);
+		return driver.executeScript('return $(".block-search-box").length;')
+	})
+	.then(function(boxLength) {
+		console.log('---------------1 :' + boxLength);
+		if(boxLength >= 1) {
+			return pOK();
+		} else {
+			return driver.findElement(By.id("yxjh")).click();
 		}
+	})
+	.then(function() {
+		console.log('000000000000000');
+		//find and click 立即推广
+		blockSearchBox = driver.wait(until.elementLocated(By.className('block-search-box')), 50000);
+		//console.log('111111111111 : ' + blockSearchBox.length);
+		return blockSearchBox.getAttribute('class');
+	})
+	.then(function(found) {
+		console.log('222222222222: ' + found);
+		driver.wait(until.elementLocated(By.className('blbox1111111111')), 30000);
 
-		var box = driver.findElement(By.className('block-search-box'));
-		// try
-		// {
-		// 	var tagCoupon = box.findElement(By.className('tag-coupon'));
-		// 	hasCoupon = true;
-		// } catch(e) {
-		// 	console.log(hasCoupon ? "has coupon" : "not coupon");
+		if(!found) {
+			return pOK();
+		} else {
+			var couponSpan = found.findElement(By.className('money')).findElement(By.css('span'));
+			console.log('cccccccccccc : ' + couponSpan.length);
+			return couponSpan.getText();
+		}
+	})
+	.then(function(cpValue) {
+		console.log('333333333333333');
+		if(cpValue) {
+			hasCoupon = true;
+			couponValue = parseInt(couponValue);
+			console.log('hasCoupon' + hasCoupon);
+			console.log('couponValue' + couponValue);
+		} else {
+			console.log('not coupon');
+		}
+		return blockSearchBox.findElement(By.linkText('立即推广')).click();
+
+
+
+		// hasCoupon = driver.executeScript('return $(".block-search-box").first().find(".tag-coupon").length >= 1');
+		// if(hasCoupon) {
+		// 	couponValue = driver.executeScript('return $(".block-search-box").eq(4).find(".money span").text()')
+		// 	if(couponValue) {
+		// 		couponValue = parseInt(couponValue);
+		// 	}
 		// }
-		// console.log(hasCoupon ? "has coupon" : "not coupon");
-
-		var selectBtn = box.findElement(By.className("box-btn-left"));
-		return selectBtn.click();
+		// console.log("hasCoupon" + hasCoupon);
+		// console.log("couponValue" + couponValue);
+		// return driver.executeScript('$(".box-btn-left").first().click();');
+		// console.log("is goto 1");
+	 	
+		// // try
+		// // {
+		// // 	var tagCoupon = box.findElement(By.className('tag-coupon'));
+		// // 	hasCoupon = true;
+		// // } catch(e) {
+		// // 	console.log(hasCoupon ? "has coupon" : "not coupon");
+		// // }
+		// // console.log(hasCoupon ? "has coupon" : "not coupon");
+		// console.log("is goto 2");
+		//var selectBtn = box.findElement(By.className("box-btn-left"));
+		// console.log("is goto 11");
+		//return selectBtn.click();
+	})
+	.then(function() {
+		return driver.executeScript('return 1');
 	})
 	.then(function() {
 		//find and click 设置推广位
 		console.log('find and click 设置推广位');
-		var bdialogFt = driver.wait(until.elementLocated(By.className('bdialog-ft')), 5000);
-		return bdialogFt.findElement(By.css('button[mx-click=submit]')).click();
+		return driver.executeAsyncScript('$(".dialog-ft").find("button").first().click()');
+		//var bdialogFt = driver.wait(until.elementLocated(By.className('dialog-ft')), 5000);
+		//return bdialogFt.findElement(By.css('button[mx-click=submit]')).click();
 	})
 	.then(function() {
 		//find and click 淘口令tab
-		var magixVfCode = driver.wait(until.elementLocated(By.id('magix_vf_code')), 3000);
-		var taoKouLinBtn = magixVfCode.findElement(By.class('tab-nav')).findElement(By.css('li:contains(淘口令)'));
+		console.log('find and click 淘口令tab');
+		//return driver.executeScript('$("#magix_vf_code").find("li:contains(淘口令)").first().click()');
+		var magixVfCode = driver.wait(until.elementLocated(By.id('magix_vf_code')), 50000);
+		var taoKouLinBtn = magixVfCode.findElement(By.className('tab-nav')).findElement(By.css('li:contains(淘口令)'));
 		return taoKouLinBtn.click();
 	})
 	.then(function() {
 		//find and get 淘口令代码
+		console.log('find and get 淘口令代码');
 		if(hasCoupon) {
-			var clipboardTarget = driver.wait(until.elementLocated(By.id('clipboard-target')), 3000);
+			var clipboardTarget = driver.wait(until.elementLocated(By.id('clipboard-target')), 50000);
 			return clipboardTarget.getAttribute("value");
 		} else {
-			var clipboardTarget2 = driver.wait(until.elementLocated(By.id('clipboard-target-2')), 3000);
+			var clipboardTarget2 = driver.wait(until.elementLocated(By.id('clipboard-target-2')), 50000);
 			return clipboardTarget2.getAttribute("value");
 		}
 	})
 	.then(function(taoKouLinStr) {
 		console.log("las taoKouLin str : " + taoKouLinStr);
+		return pOK();
 	})
-	// .catch(function() {
-	// 	console.log("未找到相关商品");
-	// })
+	// // .catch(function() {
+	// // 	console.log("未找到相关商品");
+	// // })
+	.then(function() {
+		driver.wait(until.elementLocated(By.id("yxjh333333")), 15000);
+		console.log("is over");
+	})
 }
 
 function login() {
@@ -226,5 +267,6 @@ function alimamaDingTalk(qrcode) {
 //example1();
 //example2();
 //getTbkInfo2('https://detail.tmall.com/item.htm?id=556227443376&ut_sk=1.WdcRwYYfoP8DAEyjsHitmqkx_21380790_1513865805666.TaoPassword-Weixin.baobeixiangqingfenxiang&from=tbkfenxiangplus&suid=C9882239-5455-4881-A830-F1C1AC11E59B&tbkShareId=2555017770&systype=m&ali_trackid=2:mm_26632441_0_0:1513866407388_213_6540357480&fromScene=100&sourceType=item&shareid=CE9EA75B-45AB-435E-8833-0E04F035A8B8&un=aca25f20cf947f9246e6040d6f65052e&share_crt_v=1&cpp=1&shareurl=true&spm=a313p.22.4n.85329150789&short_name=h.BxEUKv&app=chrome');
-getTbkInfo3('http://m.tb.cn/h.BxTYnx');
+// getTbkInfo3('http://m.tb.cn/h.BxTYnx');
+getTbkInfo3('https://detail.tmall.com/item.htm?id=530783481192&spm=a219t.7900221/10.1998910419.d30ccd691.62903cdeBqhGxo&sku_properties=20397:10122');
 //driver.quit();
