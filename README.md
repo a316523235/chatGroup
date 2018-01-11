@@ -94,3 +94,19 @@
         "_id": "VuwYS0P8SiumtArH"
     }
 }
+
+//get coupon url
+{ effectiveEndTime: null,
+  effectiveStartTime: null,
+  max_commission_rate: '5.50',
+  coupon_end_time: false,
+  coupon_start_time: false,
+  info1: null,
+  quan: null,
+  coupon_info: null,
+  count: null,
+  rest: null,
+  url: 'https://uland.taobao.com/coupon/edetail?e=I4r1v6MHasEGQASttHIRqVMGpsDWnk
+GJFxM9gJqbl20ujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSS
+QVF%2BLQAJXviHvlGh6jLO1J&traceId=0ab84e8915155984565074858e',
+  session_end_time: 1520670291 }
