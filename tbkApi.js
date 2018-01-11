@@ -32,7 +32,8 @@ function getYsdUrl(mm, mallProductID) {
 	return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mm.mmid;
 }
 
-function getTaokoulinByAPI(shortUrl) {
+exports.getTaokoulinByAPI = function(shortUrl, callback) {
+	var lastMsg = "";
 	var _realyUrl = "";
 	var mallProductID = "";
 	driver.get(shortUrl)
@@ -50,9 +51,19 @@ function getTaokoulinByAPI(shortUrl) {
 		var ysdUrl = getYsdUrl(mm, mallProductID);
 		console.log(ysdUrl);
 		request.get(ysdUrl, function(err, res, body) {
-			console.log(body);
 			var data = JSON.parse(body);
 			console.log(data);
+			if(data && data.max_commission_rate && data.url) {
+				if(data.coupon_info) {
+					lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r 优惠券：" + data.coupon_info 
+						+ "/n/r <br /> 优惠地址：" + data.url;
+				} else {
+					lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r  优惠券：无，优惠地址：" + data.url;
+				}
+			} else {
+				lastMsg = "该商品无佣金";
+			}
+			callback(lastMsg);
 		});
 	})
 }
@@ -63,4 +74,4 @@ function getQueryString(url, name) {
 	if (r != null) return unescape(r[2]); return null; 
 } 
 
-getTaokoulinByAPI('http://m.tb.cn/h.BxTYnx');
+//getTaokoulinByAPI('http://m.tb.cn/h.BxTYnx');
