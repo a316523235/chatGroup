@@ -110,3 +110,48 @@
 GJFxM9gJqbl20ujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSS
 QVF%2BLQAJXviHvlGh6jLO1J&traceId=0ab84e8915155984565074858e',
   session_end_time: 1520670291 }
+
+
+//format    String  否   响应格式。默认为xml格式，可选值：xml，json。
+//http://open.taobao.com/docs/api.htm?spm=a219a.7395905.0.0.xNICkx&scopeId=11655&apiId=31127
+
+TopClient = require('./topClient').TopClient;
+var client = new TopClient({
+    'appkey': 'appkey',
+    'appsecret': 'secret',
+    'REST_URL': 'http://gw.api.taobao.com/router/rest'
+});
+ 
+client.execute('taobao.tbk.tpwd.create', {
+    'user_id':'123',
+    'text':'长度大于5个字符',
+    'url':'https://uland.taobao.com/',
+    'logo':'https://uland.taobao.com/',
+    'ext':'{}'
+}, function(error, response) {
+    if (!error) console.log(response);
+    else console.log(error);
+})
+
+<tbk_tpwd_create_response>
+    <data>
+        <model>￥AADPOKFz￥</model>
+    </data>
+</tbk_tpwd_create_response>
+
+{
+    "tbk_tpwd_create_response":{
+        "data":{
+            "model":"￥AADPOKFz￥"
+        }
+    }
+}
+
+{
+    "error_response":{
+        "sub_msg":"非法参数",
+        "code":50,
+        "sub_code":"isv.invalid-parameter",
+        "msg":"Remote service error"
+    }
+}
