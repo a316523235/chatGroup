@@ -37,7 +37,7 @@ function getYsdUrl(mm, mallProductID) {
   return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mm.mmid;
 }
 
-function getTaokoulinByAPI(shortUrl, callback) {
+function getTaokoulinByAPI(shortUrl, weixinMsg) {
   var lastMsg = "";
   var _realyUrl = "";
   var mallProductID = "";
@@ -60,15 +60,24 @@ function getTaokoulinByAPI(shortUrl, callback) {
       console.log(data);
       if(data && data.max_commission_rate && data.url) {
         if(data.coupon_info) {
-          lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r 优惠券：" + data.coupon_info 
-            + "/n/r <br /> 优惠地址：" + data.url;
+          lastMsg = "佣金比例：" + data.max_commission_rate + "%\n优惠券：" + data.coupon_info 
+            + "\n优惠地址：" + data.url;
         } else {
-          lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r  优惠券：无，优惠地址：" + data.url;
+          lastMsg = "佣金比例：" + data.max_commission_rate + "%\n优惠券：无\n优惠地址：" + data.url;
         }
       } else {
         lastMsg = "该商品无佣金";
       }
-      callback(lastMsg);
+      console.log(lastMsg)
+      if(weixinMsg.Member.NickName == '冰') {
+        //bot.sendText(weixinMsg.ToUserName, '这下有说是测试了');
+        bot.sendText(weixinMsg.ToUserName, lastMsg);
+      } else {
+        //bot.sendText(weixinMsg.FromUserName, '这下有说是测试了');
+        bot.sendText(weixinMsg.FromUserName, lastMsg);
+      }
+      
+      //callback(lastMsg);
     });
   })
 }
@@ -85,8 +94,8 @@ function getQueryString(url, name) {
 
 
 const bot = new Weixinbot();
-const tipGroups = ["@@8504cd58af8da4944a65290a383eb099c82c55a02586e41594ef2cccb6be3edc", "@@f97b48781113967bad9699be7fdbcb741b7c091d302f823d8f6d2994ae8a3962"];
-const testTipGroups = ["@@8504cd58af8da4944a65290a383eb099c82c55a02586e41594ef2cccb6be3edc"];
+const tipNames = [""];
+const testTipNames = ["冰", "福尔摩斯豆豆", "吴豆子"];
 
 //bot.on('qrcode', console.log);
 bot.on('qrcode', dingTalk);
@@ -94,25 +103,34 @@ bot.on('qrcode', dingTalk);
 bot.on('friend', (msg) => {
   console.log("发起人：" + msg.FromUserName);
   console.log("发送至：" + msg.ToUserName);
-  var isTipGroup = testTipGroups.includes(msg.FromUserName);
-  isTipGroup = true;
-  var isTipContent = (msg.Content.indexOf("http") > -1 && msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1) || msg.Content == "测试";
-  console.log(msg.Member.NickName + '(' + isTipGroup.toString() + ' ' + isTipContent.toString() + '): ' + msg.Content);
+  //var isTipName = testTipGroups.includes(weixinMsg.Member.NickName) || msg.Content.indexOf("@吴豆子") > -1 || msg.Content.indexOf("@福尔摩斯豆豆") > -1;
+  var isTipName = false;
+  for(var i = 0; i < testTipNames.length; i++) {
+    if(msg.Content.indexOf("@" + testTipNames[i] + " ") > -1) {
+      console.log("找到了" + testTipNames[i]);
+      isTipName = true;
+      break;
+    }
+  }
+  var isTipContent = msg.Content.indexOf("http") > -1 && msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1;
+  console.log(msg.Member.NickName + '(' + isTipName.toString() + ' ' + isTipContent.toString() + '): ' + msg.Content);
 
-  if(true || ((testTipGroups.includes(msg.FromUserName)) && isTipContent)) {
+  //if(true || ((testTipGroups.includes(msg.FromUserName)) && isTipContent)) {
+  if(isTipName && isTipContent) {
 	   console.log('有进来' + msg.Content);
      var shortUrl = msg.Content.substring(msg.Content.indexOf("http"), msg.Content.indexOf("点击链接"));
      console.log(shortUrl);
-     getTaokoulinByAPI(shortUrl, function(lastMsg) { bot.sendText(msg.FromUserName, lastMsg)});
+     getTaokoulinByAPI(shortUrl, msg);
 	   //bot.sendText(msg.FromUserName, '这下有说是测试了');
   } else {
-	   console.log('没进来' + msg.Content);
+	   //console.log('没进来' + msg.Content);
+     //bot.sendText(msg.ToUserName, '这\n下\r有说是测\n\r试了');
   }
 });
 
 function dingTalk(qrcode) {
 	console.log(qrcode);
-    return;
+    //return;
     var options = {
         method: 'post',
         url: 'https://oapi.dingtalk.com/robot/send?access_token=c88befc4e1bc5ef9e289fd6e5891d37bf6f402f3d2aafdb8d0519f46786d23e7',
