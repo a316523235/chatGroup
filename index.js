@@ -95,7 +95,7 @@ function getQueryString(url, name) {
 
 const bot = new Weixinbot();
 const tipNames = [""];
-const testTipNames = ["冰", "福尔摩斯豆豆", "吴豆子"];
+const testTipNames = ["福尔摩斯豆豆", "吴豆子"];
 
 //bot.on('qrcode', console.log);
 bot.on('qrcode', dingTalk);
