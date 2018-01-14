@@ -37,8 +37,9 @@ function getYsdUrl(mm, mallProductID) {
   return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mm.mmid;
 }
 
-function getTaokoulinByAPI(shortUrl, weixinMsg) {
+function getTaokoulinByAPI(title, shortUrl, weixinMsg) {
   var lastMsg = "";
+  var lastMsgForSelf = "";
   var _realyUrl = "";
   var mallProductID = "";
   driver.get(shortUrl)
@@ -59,12 +60,18 @@ function getTaokoulinByAPI(shortUrl, weixinMsg) {
       var data = JSON.parse(body);
       console.log(data);
       if(data && data.max_commission_rate && data.url) {
+        //自己的消息
         if(data.coupon_info) {
-          lastMsg = "佣金比例：" + data.max_commission_rate + "%\n优惠券：" + data.coupon_info 
-            + "\n优惠地址：" + data.url;
+          lastMsgForSelf = "商品：" + title + "\n佣金比例：" + data.max_commission_rate + "%\n优惠券：" + data.coupon_info 
+            + "\n优惠券地址：" + data.url;
+          
         } else {
-          lastMsg = "佣金比例：" + data.max_commission_rate + "%\n优惠券：无\n优惠地址：" + data.url;
+          lastMsgForSelf = "商品：" + title + "\n佣金比例：" + data.max_commission_rate + "%\n优惠券：无\n优惠地址：" + data.url;
         }
+        dingTalkForMsg(lastMsgForSelf);
+
+        //别人的消息
+        lastMsg = "商品：" + title + "\n优惠券地址：" + data.url;
       } else {
         lastMsg = "该商品无佣金";
       }
@@ -76,7 +83,7 @@ function getTaokoulinByAPI(shortUrl, weixinMsg) {
         //bot.sendText(weixinMsg.FromUserName, '这下有说是测试了');
         bot.sendText(weixinMsg.FromUserName, lastMsg);
       }
-      
+
       //callback(lastMsg);
     });
   })
@@ -119,8 +126,9 @@ bot.on('friend', (msg) => {
   if(isTipName && isTipContent) {
 	   console.log('有进来' + msg.Content);
      var shortUrl = msg.Content.substring(msg.Content.indexOf("http"), msg.Content.indexOf("点击链接"));
+     var title = msg.Content.substring(msg.Content.indexOf("（") + 1, msg.Content.indexOf("）"));
      console.log(shortUrl);
-     getTaokoulinByAPI(shortUrl, msg);
+     getTaokoulinByAPI(title, shortUrl, msg);
 	   //bot.sendText(msg.FromUserName, '这下有说是测试了');
   } else {
 	   //console.log('没进来' + msg.Content);
@@ -146,6 +154,32 @@ function dingTalk(qrcode) {
                 "picUrl": qrcode,
                 "messageUrl": qrcode
             }
+        }
+    };
+
+    var r = request(options, function (error, response, body) {
+        if (!error) {
+            console.log(body);
+        }
+    });
+};
+
+function dingTalkForMsg(sendMsg) {
+    //console.log(qrcode);
+    //return;
+    var options = {
+        method: 'post',
+        url: 'https://oapi.dingtalk.com/robot/send?access_token=c88befc4e1bc5ef9e289fd6e5891d37bf6f402f3d2aafdb8d0519f46786d23e7',
+        json: true,
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: {
+            "msgtype": "text", 
+            "text": {
+              "content": sendMsg
+            },
+            "at": {} 
         }
     };
 
