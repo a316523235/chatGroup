@@ -8,7 +8,7 @@ ApiClient = require('./sdk-nodejs').ApiClient;
 const client = new ApiClient({
     'appkey':'24770835',
     'appsecret':'d4ada29cd12178c7a671db37067258bc',
-    'url':'http://gw.api.taobao.com/router/rest2'
+    'url':'http://gw.api.taobao.com/router/rest'
 });
 //var tbkApi = request('./tbkApi.js');
 
