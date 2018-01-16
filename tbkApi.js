@@ -2,11 +2,17 @@ var request = require('request');
 var Promise = require('promise');
 
 var webdriver = require('selenium-webdriver'),
-    By = webdriver.By,
-    until = webdriver.until;
-var driver = new webdriver.Builder()
-    .forBrowser('chrome')
-    .build();
+By = webdriver.By,
+until = webdriver.until,
+chrome = require('selenium-webdriver/chrome');
+
+var options = new chrome.Options();
+var service = new chrome.ServiceBuilder().setPath('./chromedriver.exe').build();
+var driver = chrome.Driver.createSession(options, service);
+
+// var driver = new webdriver.Builder()
+//     .forBrowser('chrome')
+//     .build();
 
 
 const yishoudanTbID = 409468254;
