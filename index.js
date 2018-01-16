@@ -144,7 +144,7 @@ bot.on('friend', (msg) => {
 
 function dingTalk(qrcode) {
 	console.log(qrcode);
-    //return;
+    return;
     var options = {
         method: 'post',
         url: 'https://oapi.dingtalk.com/robot/send?access_token=c88befc4e1bc5ef9e289fd6e5891d37bf6f402f3d2aafdb8d0519f46786d23e7',
@@ -172,7 +172,7 @@ function dingTalk(qrcode) {
 
 function dingTalkForMsg(sendMsg) {
     //console.log(qrcode);
-    //return;
+    return;
     var options = {
         method: 'post',
         url: 'https://oapi.dingtalk.com/robot/send?access_token=c88befc4e1bc5ef9e289fd6e5891d37bf6f402f3d2aafdb8d0519f46786d23e7',
