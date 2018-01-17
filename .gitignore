@@ -61,3 +61,4 @@ typings/
 .cookie.json
 .secret.json
 package-lock.json
+sdk-nodejs/node_modules
