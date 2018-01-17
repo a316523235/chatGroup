@@ -10,7 +10,7 @@ const client = new ApiClient({
 function getTkl() {
 	client.execute('taobao.tbk.tpwd.create',
     {
-        'text':'优惠商品',
+        'text':'优惠商品信息',
         'url':'https://uland.taobao.com/coupon/edetail?e=I4r1v6MHasEGQASttHIRqVMGpsDWnkGJFxM9gJqbl20ujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSSQVF%2BLQAJXviHvlGh6jLO1J&traceId=0bba613b15161111527882166e',
     }, function (error,response) {
         if(!error)
