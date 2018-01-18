@@ -20,7 +20,20 @@ function getTkl() {
     });
 }
 
-
+function getPrice(mallProductID) {
+	client.execute('taobao.tbk.item.info.get',
+    {
+        'fields':'reserve_price, zk_final_price, pic_url',
+		'num_iids': mallProductID
+    }, function (error,response) {
+        if(!error) {
+        	console.log(response.results.n_tbk_item[0]);
+            console.log(response.results.n_tbk_item[0].zk_final_price);
+        }
+        else
+            console.log(error);
+    });
+}
 
 function getMallProductID(shortUrl) {
 	var realyUrl = "";
@@ -32,4 +45,6 @@ function getMallProductID(shortUrl) {
 }
 
 //getRidrectUrl("http://m.tb.cn/h.BxTYnx");
-getTkl();
+//getTkl();
+//getPrice('562873272057');
+getPrice('525922860993');

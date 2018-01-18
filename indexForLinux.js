@@ -37,45 +37,63 @@ function getSendUserName(weixinMsg) {
 }
 
 function getTaokoulinByAPI(title, shortUrl, weixinMsg, mm) {
-  var lastMsg = "";
-  var lastMsgForSelf = "";
-  var _realyUrl = "";
-  var mallProductID = "";
-  request.get(shortUrl, function(err, res, body) {
-	mallProductID = body.match(/&id=(\d+)/g)[0].match(/\d+/)[0];
-    console.log(mallProductID);
-    //var mm = getMM('冰');
-    //console.log(mm);
-    var ysdUrl = getYsdUrl(mm, mallProductID);
-    lastMsg = "该商品无佣金";
-    console.log(ysdUrl);
+  	var lastMsg = "";
+  	var lastMsgForSelf = "";
+  	var _realyUrl = "";
+  	var mallProductID = "";
+  	request.get(shortUrl, function(err, res, body) {
+		mallProductID = body.match(/&id=(\d+)/g)[0].match(/\d+/)[0];
+    	console.log(mallProductID);
+    	//var mm = getMM('冰');
+    	//console.log(mm);
+    	var ysdUrl = getYsdUrl(mm, mallProductID);
+    	lastMsg = "该商品无佣金";
+    	console.log(ysdUrl);
 	    request.get(ysdUrl, function(err, res, body) {
 	      var data = JSON.parse(body);
 	      console.log(data);
-	      if(data && data.max_commission_rate && data.url) {
-	      	client.execute('taobao.tbk.tpwd.create', {
-		        'text':'优惠商品淘口令',
-		        'url': data.url
-		      }, function (error,response) {
-		    	var tkl = "";
-		        if(!error && response.data.model)
-		        {
-		        	tkl = response.data.model;
-		        	lastMsg = "商品：" + title + "\n淘口令：" + tkl + "\n------------\n复制这条信息，打开【手机淘宝】即可查看";
-		        	bot.sendText(getSendUserName(weixinMsg), lastMsg);
-		        }
-		        else
-		        {
-		        	console.log(error);
-		        	//bot.sendText(getSendUserName(weixinMsg), lastMsg);
-		        }
-		        lastMsgForSelf = "商品：" + title + "\n佣金比例：" + data.max_commission_rate + "%\n优惠券：" + data.coupon_info 
-	            +  "\n淘口令：" + tkl + "\n优惠券地址：" + data.url;
-	            dingTalkForMsg(lastMsgForSelf);
-		    });
-	      } else {
-	      	bot.sendText(getSendUserName(weixinMsg), lastMsg);
-	      }
+	      	if(data && data.max_commission_rate && data.url) {
+		      	client.execute('taobao.tbk.tpwd.create', {
+			        'text':'优惠商品淘口令',
+			        'url': data.url
+			      }, function (error,response) {
+			    	var tkl = "";
+			        if(!error && response.data.model)
+			        {
+			        	tkl = response.data.model;
+			        	client.execute('taobao.tbk.item.info.get', {
+			        		'fields':'zk_final_price,reserve_price',
+			        		'num_iids': mallProductID
+			        	}, function(itemError, itemResponse) {
+			        		if(!error && itemResponse.results.n_tbk_item.length > 0) {
+			        			var zk_final_price = itemResponse.results.n_tbk_item[0].zk_final_price
+					        	lastMsg = title + "\n";
+					        	lastMsg += "【在售价】 " + zk_final_price + "元\n";
+					        	if(data.quan) {
+					        		var lastPrice = (zk_final_price - data.quan).toFixed(2);
+					        		lastMsg += "【券后价】 " + lastPrice + "元\n";
+					        	}
+					        	lastMsg += "------------\n";
+					        	lastMsg += "复制这条信息，" + tkl + " 打开【手机淘宝】即可查看";
+					        	bot.sendText(getSendUserName(weixinMsg), lastMsg);
+			        		} else {
+			        			console.log("淘宝接口：获取商品价格失败");
+			        		}
+			        	})
+			        	//lastMsg = "商品：" + title + "\n淘口令：" + tkl + "\n------------\n复制这条信息，打开【手机淘宝】即可查看";
+			        }
+			        else
+			        {
+			        	console.log(error);
+			        	//bot.sendText(getSendUserName(weixinMsg), lastMsg);
+			        }
+			        lastMsgForSelf = "商品：" + title + "\n佣金比例：" + data.max_commission_rate + "%\n优惠券：" + data.coupon_info 
+		            +  "\n淘口令：" + tkl + "\n优惠券地址：" + data.url;
+		            dingTalkForMsg(lastMsgForSelf);
+			    });
+	      	} else {
+	      		bot.sendText(getSendUserName(weixinMsg), lastMsg);
+	      	}
 	    });
     });
 }

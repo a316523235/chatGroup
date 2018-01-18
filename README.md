@@ -114,6 +114,21 @@ GJFxM9gJqbl20ujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSS
 QVF%2BLQAJXviHvlGh6jLO1J&traceId=0ab84e8915155984565074858e',
   session_end_time: 1520670291 }
 
+  {
+    "effectiveEndTime":"2018-01-20",
+    "effectiveStartTime":null,
+    "max_commission_rate":"30.00",
+    "coupon_end_time":1516377600,
+    "coupon_start_time":1516118400,
+    "info1":"589",
+    "quan":"505",
+    "coupon_info":"满589元减505元",
+    "count":100000,
+    "rest":98150,
+    "url":"https://uland.taobao.com/coupon/edetail?e=QCcW%2Bs7QjOYGQASttHIRqWu%2F2ZLvw%2F%2FsStCuuzYMc3QujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSSQGmY4hFfhtzGuFqp8TFaHMonv6QcvcARY%3D&traceId=0ab2507a15162869150885323e",
+    "session_end_time":1520670291
+}
+
 
 //format    String  否   响应格式。默认为xml格式，可选值：xml，json。
 //http://open.taobao.com/docs/api.htm?spm=a219a.7395905.0.0.xNICkx&scopeId=11655&apiId=31127
