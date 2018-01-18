@@ -48,10 +48,10 @@ function getTaokoulinByAPI(title, shortUrl, weixinMsg, mm) {
     //console.log(mm);
     var ysdUrl = getYsdUrl(mm, mallProductID);
     lastMsg = "该商品无佣金";
-    //console.log(ysdUrl);
+    console.log(ysdUrl);
 	    request.get(ysdUrl, function(err, res, body) {
 	      var data = JSON.parse(body);
-	      //console.log(data);
+	      console.log(data);
 	      if(data && data.max_commission_rate && data.url) {
 	      	client.execute('taobao.tbk.tpwd.create', {
 		        'text':'优惠商品淘口令',
@@ -116,15 +116,16 @@ bot.on('friend', (msg) => {
   //     break;
   //   }
   // }
-  var isTipContent = msg.Content.indexOf("http") > -1 && msg.Content.indexOf('手淘') > -1 && msg.Content.indexOf('点击链接') > -1;
-  //console.log(msg.Member.NickName + '(' + isTipName.toString() + ' ' + isTipContent.toString() + '): ' + msg.Content);
+  var isTipContent = msg.Content.indexOf("http") > -1 && (msg.Content.indexOf('手淘') > -1 || msg.Content.indexOf('手机淘宝') > -1) && msg.Content.indexOf('点击链接') > -1;
+  console.log(msg.Member.NickName + '(' + isTipName.toString() + ' ' + isTipContent.toString() + '): ' + msg.Content);
 
   //if(true || ((testTipGroups.includes(msg.FromUserName)) && isTipContent)) {
   if(isTipName && isTipContent) {
-	 //console.log('有进来' + msg.Content);
+	 console.log('有进来');
      var shortUrl = msg.Content.substring(msg.Content.indexOf("http"), msg.Content.indexOf("点击链接"));
+     console.log(shortUrl);
      var title = msg.Content.substring(msg.Content.indexOf("（") + 1, msg.Content.indexOf("）"));
-     //console.log(shortUrl);
+     console.log(title);
      getTaokoulinByAPI(title, shortUrl, msg, mm);
 	   //bot.sendText(msg.FromUserName, '这下有说是测试了');
   } else {
