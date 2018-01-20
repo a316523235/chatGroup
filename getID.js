@@ -1,5 +1,5 @@
 var request = require('request');
-ApiClient = require('./sdk-nodejs').ApiClient;
+ApiClient = require('./taobaoSDK.js').ApiClient;
 
 const client = new ApiClient({
     'appkey':'24770835',
@@ -45,6 +45,6 @@ function getMallProductID(shortUrl) {
 }
 
 //getRidrectUrl("http://m.tb.cn/h.BxTYnx");
-//getTkl();
+getTkl();
 //getPrice('562873272057');
-getPrice('525922860993');
+//getPrice('525922860993');

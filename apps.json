@@ -1,7 +1,7 @@
 {
   "apps" : [{
     "name"        : "chatGroup",
-    "script"      : "./index.js",
+    "script"      : "./indexForLinux.js",
     "watch"       : true,
     "env": {
       "NODE_ENV": "development"
