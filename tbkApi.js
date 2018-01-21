@@ -1,83 +1,246 @@
 var request = require('request');
 var Promise = require('promise');
+ApiClient = require('./taobaoSDK.js').ApiClient;
 
-var webdriver = require('selenium-webdriver'),
-By = webdriver.By,
-until = webdriver.until,
-chrome = require('selenium-webdriver/chrome');
+const client = new ApiClient({
+    'appkey':'24770835',
+    'appsecret':'d4ada29cd12178c7a671db37067258bc',
+    'url':'http://gw.api.taobao.com/router/rest'
+});
 
-var options = new chrome.Options();
-var service = new chrome.ServiceBuilder().setPath('./chromedriver.exe').build();
-var driver = chrome.Driver.createSession(options, service);
+// function getTkl() {
+// 	client.execute('taobao.tbk.tpwd.create',
+//     {
+//         'text':'优惠商品信息',
+//         'url':'https://uland.taobao.com/coupon/edetail?e=I4r1v6MHasEGQASttHIRqVMGpsDWnkGJFxM9gJqbl20ujibHHIoHzCIfQrFfeguDSLljtHh26S8Qgx6SFRn59JQ5wfGz%2Fu%2BN8M3Y33hPSSQVF%2BLQAJXviHvlGh6jLO1J&traceId=0bba613b15161111527882166e',
+//     }, function (error,response) {
+//         if(!error)
+//             console.log(response);
+//         else
+//             console.log(error);
+//     });
+// }
 
-// var driver = new webdriver.Builder()
-//     .forBrowser('chrome')
-//     .build();
+// function getPrice(mallProductID) {
+// 	client.execute('taobao.tbk.item.info.get',
+//     {
+//         'fields':'reserve_price, zk_final_price, pic_url',
+// 		'num_iids': mallProductID
+//     }, function (error,response) {
+//         if(!error) {
+//         	console.log(response.results.n_tbk_item[0]);
+//             console.log(response.results.n_tbk_item[0].zk_final_price);
+//         }
+//         else
+//             console.log(error);
+//     });
+// }
 
-
-const yishoudanTbID = 409468254;
-const mms = [{
-	name: "API1.0__自己",
-	winxinName: "冰",
-	mmid: "mm_25794195_41744417_186800375"
-}];
-
-//http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/561409509683/pid/mm_111149311_12424939_47176555
-
-function getMM(winxinName) {
-	for(var i in mms) {
-		var mm = mms[i];
-		console.log(mm);
-		if(mm.winxinName == winxinName) {
-			return mm;
-		}
-	}
+var getYsdUrl = function(mallProductID, mmid) {
+  return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
 }
 
-function getYsdUrl(mm, mallProductID) {
-	return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mm.mmid;
-}
-
-exports.getTaokoulinByAPI = function(shortUrl, callback) {
-	var lastMsg = "";
-	var _realyUrl = "";
-	var mallProductID = "";
-	driver.get(shortUrl)
-	.then(function() {
-		driver.wait(until.urlContains('item.htm'), 30000);
-		return driver.getCurrentUrl();
-	})
-	.then(function(realyUrl) {
-		console.log(realyUrl);
-		_realyUrl = realyUrl;
-		mallProductID = getQueryString(_realyUrl, 'id');
-		console.log(mallProductID);
-		var mm = getMM('冰');
-		console.log(mm);
-		var ysdUrl = getYsdUrl(mm, mallProductID);
-		console.log(ysdUrl);
-		request.get(ysdUrl, function(err, res, body) {
-			var data = JSON.parse(body);
-			console.log(data);
-			if(data && data.max_commission_rate && data.url) {
-				if(data.coupon_info) {
-					lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r 优惠券：" + data.coupon_info 
-						+ "/n/r <br /> 优惠地址：" + data.url;
-				} else {
-					lastMsg = "佣金比例：" + data.max_commission_rate + "/n/r  优惠券：无，优惠地址：" + data.url;
-				}
+var getThreeUrl = function(msg) {
+	return new Promise(function(resolve, rej) {
+		try {
+			var threeUrl = msg.substring(msg.indexOf("http"), msg.indexOf("点击链接")).trim();
+			if(threeUrl) {
+				resolve({"threeUrl": threeUrl});
 			} else {
-				lastMsg = "该商品无佣金";
+				rej("【常规】获取微信消息中的链接失败");
 			}
-			callback(lastMsg);
+		} catch(e) {
+			rej("【常规】获取微信消息中的链接失败");
+		}
+	});    
+    //console.log("(接口)第三方链接：" + threeUrl + ", 是否相等：" + (threeUrl == "http://m.tb.cn/h.ZZtFUer?cv=3Sw8GMsraA&sm=523d5e"));
+    //return threeUrl;
+}
+
+var getMallProductID = function(shortUrl) {
+	return new Promise(function(resolve, rej) {
+		request.get(shortUrl, function(err, res, body) {
+			if(err) {
+				rej("【接口】获取真实链接失败" + err);
+			} else {
+				try {
+					var mallProductID = body.match(/&id=(\d+)/g)[0].match(/\d+/)[0];
+					//console.log("(接口)获取商品ID：" + mallProductID);
+					resolve({"mallProductID": mallProductID});
+				} catch(e) {
+					resolve("【接口】获取商品ID失败");
+				}
+			}
 		});
+	});
+}
+
+var getProductInfoBySdk = function(mallProductID) {
+	return new Promise(function(resolve, rej) {
+		client.execute('taobao.tbk.item.info.get',
+	    {
+	        'fields':'title, reserve_price, zk_final_price, pict_url',
+			'num_iids': mallProductID
+	    }, function (error,response) {
+	    	if(error) {
+	    		rej("【接口】请求商品信息SDK失败");
+	    	} else {
+	    		if(response.results.n_tbk_item && response.results.n_tbk_item.length > 0) {
+	    			var item = response.results.n_tbk_item[0];
+	    			//console.log("(接口)获取商品信息，价格：" + item.zk_final_price + "图片：" + item.pict_url);
+	    			resolve({"title": item.title, "price": item.zk_final_price, "picUrl": item.pict_url});
+	    		} else {
+	    			rej("【提示】该商品无优惠信息");
+	    		}
+	    	}
+	    });
 	})
 }
 
-function getQueryString(url, name) { 
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-	var r = url.split('?')[1].match(reg); 
-	if (r != null) return unescape(r[2]); return null; 
-} 
+var getCommissionInfoByYsd = function(yishoudanUrl) {
+	return new Promise(function(resolve, rej) {
+		request.get(yishoudanUrl, function(err, res, body) {
+			if(err) {
+				rej("【接口】请求Ysd转链失败" + err);
+			} else {
+				var data = {};
+				try {
+					data = JSON.parse(body);
+					if(data && data.url) {
+						resolve({url: data.url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
+					} else {
+						rej("【接口】转链json信息中未包含链接地址，原始信息" + body);
+					}
+				} catch (e) {
+					rej("【接口】转链信息转json失败，原始信息" + body);
+				}
 
-//getTaokoulinByAPI('http://m.tb.cn/h.BxTYnx');
+			}
+		});
+	});
+}
+
+var getTklBySdk = function (url, picUrl) {
+	return new Promise(function(resolve, rej) {
+		client.execute('taobao.tbk.tpwd.create',
+	    {
+	        'text':'优惠商品信息',
+	        'url': url,
+	        'logo': picUrl
+	    }, function (error,response) {
+	    	if(error) {
+	    		rej("【接口】请求淘口令SDK失败" + error);
+	    	} else {
+	    		try {
+	    			var tkl = response.data.model;
+	    			resolve({"tkl": tkl});
+	    		} catch(e) {
+	    			rej("【接口】获取淘口令失败, 原始信息" + JSON.stringify(response));
+	    		}
+	    	}
+	    });
+	});
+}
+
+//data =  { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl};
+var getLastResponMsg = function(data) {
+	try {
+		var lastMsg = data.title + "\n";
+		lastMsg += "【在售价】 " + data.price + "元\n";
+		if(data.quanValue) {
+			var lastPrice = (data.price - data.quanValue).toFixed(2);
+			if(lastPrice >= 0) {
+				lastMsg += "【券后价】 " + lastPrice + "元\n";
+			} else {
+				console.log("【常规】券后价小于0");
+			}
+		}
+		lastMsg += "------------\n";
+		lastMsg += "复制这条信息，" + data.tkl + " 打开【手机淘宝】即可查看";
+		return lastMsg;
+	} catch(e) {
+		console.log("【常规】数据转换为微信答复信息失败");
+	}
+	
+}
+
+var getLastInfo = function(weixinMsg, mmid) {
+	return new Promise(function(resolve, rej) {
+		var mallProductID = "";
+		var yishoudanUrl = "";
+		var picUrl = "";
+		var title = "", price = "", quanValue = "", tkl = "";
+		getThreeUrl(weixinMsg).then(function(data) {
+			//{"threeUrl": threeUrl}
+			console.log("提取微信消息：" + JSON.stringify(data));
+			console.log("\n");
+			return getMallProductID(data.threeUrl)
+		})
+		.then(function(data) {
+			//{"mallProductID": mallProductID}
+			console.log("商品ID：" + JSON.stringify(data));
+			console.log("\n");
+			mallProductID = data.mallProductID;
+			yishoudanUrl = getYsdUrl(mallProductID, mmid);
+			console.log("yishoudan链接：" + yishoudanUrl);
+			console.log("\n");
+			return getProductInfoBySdk(mallProductID);
+		})
+		.then(function(data) {
+			//{"title": item.title, "price": item.zk_final_price, "picUrl": item.pict_url}
+			console.log("商品信息" + JSON.stringify(data));
+			console.log("\n");
+			title = data.title;
+			price = data.price;
+			picUrl = data.picUrl;
+			return getCommissionInfoByYsd(yishoudanUrl);
+		})
+		.then(function(data) {
+			//{url: data.url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan}
+			console.log("佣金信息" + JSON.stringify(data));
+			console.log("\n");
+			quanValue = data.quanValue;
+			return getTklBySdk(data.url, picUrl);
+		})
+		.then(function(data) {
+			//{"tkl": tkl})
+			console.log("淘口令信息：" + JSON.stringify(data));
+			console.log("\n");
+			tkl = data.tkl;
+
+			var lastData = { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl};
+			var lastMsg = getLastResponMsg(lastData);
+			//console.log(lastMsg);
+			//console.log("\n");
+			resolve({"lastMsg": lastMsg});
+		})
+		.catch(function(msg) {
+			rej(msg);
+		})
+	});
+}
+
+function test1(weixinMsg, mmid) {
+	getLastInfo(weixinMsg, mmid).then(function(data) {
+		//{"lastMsg": lastMsg}
+		console.log("最终消息：" + JSON.stringify(data.lastMsg));
+		console.log("\n");
+	}).catch(function(msg) {
+		console.log(msg);
+	})
+}
+
+module.exports = {
+    getLastInfo: getLastInfo
+};
+
+
+//getRidrectUrl("http://m.tb.cn/h.BxTYnx");
+//getTkl();
+//getPrice('562873272057');
+//getPrice('525922860993');
+
+//var weixinMsg = "@吴豆子 @吴豆子 我剁手都要买的宝贝（小鹿叮叮超柔婴儿纸尿裤L120片男女宝宝透气干爽尿不湿批发包邮），";
+//weixinMsg +=  "快来和我一起瓜分红包】http://m.tb.cn/h.ZZtFUer?cv=3Sw8GMsraA&sm=523d5e 点击链接，再选择浏览器打开；或复制这条信息，打开👉手机淘宝👈￥3Sw8GMsraA￥";
+//getLastInfo(weixinMsg, "mm_25794195_41744417_186800375");
+//test1(weixinMsg, "mm_25794195_41744417_186800375");

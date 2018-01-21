@@ -5,6 +5,8 @@
 npm i puppeteer
 https://github.com/GoogleChrome/puppeteer/tree/v1.0.0
 
+https://www.jianshu.com/p/016169820e46
+
 发起人
 冰：@3969c16193439de3d7d360e5831cb876
 
