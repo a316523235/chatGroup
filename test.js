@@ -23,4 +23,18 @@ function testMmApi() {
 	console.log(mmApi.getMmByWinxinGroup("一点都不黑"));
 }
 
-testMmApi();
+function testWeixinApi() {
+	const Weixinbot = require('weixinbot');
+	const bot = new Weixinbot();
+	bot.on('qrcode', console.log);
+	bot.on('friend', (msg) => {
+		if(msg.FromUserName.includes('@@')) {
+			console.log("跳过");
+		} else {
+			console.log("跳过");
+		}
+	});
+	bot.run();
+}
+//testWeixinApi();
+//testMmApi();
