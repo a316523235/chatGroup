@@ -28,11 +28,13 @@ function testWeixinApi() {
 	const bot = new Weixinbot();
 	bot.on('qrcode', console.log);
 	bot.on('friend', (msg) => {
-		if(msg.FromUserName.includes('@@')) {
-			console.log("跳过");
-		} else {
-			console.log("跳过");
-		}
+		console.log(msg.FromUserName);
+	});
+	bot.on('group', (msg) => {
+		console.log("群消息");
+		console.log(msg);
+		console.log(msg.Group.NickName);
+		console.log(msg.GroupMember.DisplayName || msg.GroupMember.NickName);
 	});
 	bot.run();
 }
