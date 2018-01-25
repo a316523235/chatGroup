@@ -12,7 +12,7 @@ var getMmByWinxinName = function(winxinName) {
 			return mm;
 		}
 	}
-	return mms[0];
+	return null;
 }
 
 var getMmByWinxinGroup = function(winxinGroup) {
@@ -22,7 +22,7 @@ var getMmByWinxinGroup = function(winxinGroup) {
 			return mm;
 		}
 	}
-	return mm;
+	return null;
 }
 
 module.exports = {

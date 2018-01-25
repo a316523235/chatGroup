@@ -19,8 +19,8 @@ function testTbkApi() {
 }
 
 function testMmApi() {
-	console.log(mmApi.getMmByWinxinName("冰"));
-	console.log(mmApi.getMmByWinxinGroup("一点都不黑"));
+	console.log(mmApi.getMmByWinxinName("冰33"));
+	console.log(mmApi.getMmByWinxinGroup("一点都不黑3333"));
 }
 
 function testWeixinApi() {
@@ -39,4 +39,5 @@ function testWeixinApi() {
 	bot.run();
 }
 //testWeixinApi();
-//testMmApi();
+//testTbkApi();
+testMmApi();

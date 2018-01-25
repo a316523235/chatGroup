@@ -43,11 +43,16 @@ var getYsdUrl = function(mallProductID, mmid) {
 var getThreeUrl = function(msg) {
 	return new Promise(function(resolve, rej) {
 		try {
-			var threeUrl = msg.substring(msg.indexOf("http"), msg.indexOf("点击链接")).trim();
-			if(threeUrl) {
-				resolve({"threeUrl": threeUrl});
+			var isTipContent = msg.indexOf("http") > -1 && (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) && msg.indexOf('点击链接') > -1;
+			if(isTipContent) {
+				var threeUrl = msg.substring(msg.indexOf("http"), msg.indexOf("点击链接")).trim();
+				if(threeUrl) {
+					resolve({"threeUrl": threeUrl});
+				} else {
+					rej("【常规】获取微信消息中的链接失败");
+				}
 			} else {
-				rej("【常规】获取微信消息中的链接失败");
+				rej("【正常】该微信消息不是淘宝商品");
 			}
 		} catch(e) {
 			rej("【常规】获取微信消息中的链接失败");
