@@ -69,10 +69,11 @@ var getMallProductID = function(shortUrl) {
 				rej("【接口】获取真实链接失败" + err);
 			} else {
 				try {
-					var mallProductID = body.match(/&id=(\d+)/g)[0].match(/\d+/)[0];
+					var mallProductID = body.match(/[\?&]id=(\d+)/g)[0].match(/\d+/)[0];
 					//console.log("(接口)获取商品ID：" + mallProductID);
 					resolve({"mallProductID": mallProductID});
 				} catch(e) {
+					//console.log(body);
 					resolve("【接口】获取商品ID失败");
 				}
 			}
@@ -147,26 +148,45 @@ var getTklBySdk = function (url, picUrl) {
 	});
 }
 
-//data =  { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl};
+//var lastData = { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl, "rate": rate, "canUsedPrice": canUsedPrice };
 var getLastResponMsg = function(data) {
 	try {
-		var lastMsg = data.title + "\n";
-		lastMsg += "【在售价】 " + data.price + "元\n";
+		var lastInfo = { "lastMsg": "", "lastSelfMsg": "" };
+		lastInfo.lastMsg = data.title + "\n";
+		lastInfo.lastSelfMsg = data.title + "\n";
+
+		lastInfo.lastMsg += "【在售价】 " + data.price + "元\n";
+		lastInfo.lastSelfMsg += "【在售价】 " + data.price + "元\n";
+
 		if(data.quanValue) {
 			var lastPrice = (data.price - data.quanValue).toFixed(2);
 			if(lastPrice >= 0) {
-				lastMsg += "【券后价】 " + lastPrice + "元\n";
+				lastInfo.lastMsg += "【券后价】 " + lastPrice + "元\n";
+				lastInfo.lastSelfMsg += "【券后价】 " + lastPrice + "元\n";
 			} else {
 				console.log("【常规】券后价小于0");
 			}
 		}
-		lastMsg += "------------\n";
-		lastMsg += "复制这条信息，" + data.tkl + " 打开【手机淘宝】即可查看";
-		return lastMsg;
+
+
+		//完整提示(仅自己)
+		if(data.quanValue > 0) {
+			lastInfo.lastSelfMsg += "【券面值】" + data.quanValue + "元\n";
+			lastInfo.lastSelfMsg += "【起用价】" + data.canUsedPrice + "元\n";
+		}
+		lastInfo.lastSelfMsg += "【佣比例】 " + data.rate + "%\n";
+
+
+		lastInfo.lastMsg += "------------\n";
+		lastInfo.lastSelfMsg += "------------\n";
+
+		lastInfo.lastMsg += "复制这条信息，" + data.tkl + " 打开【手机淘宝】即可查看";
+		lastInfo.lastSelfMsg += "复制这条信息，" + data.tkl + " 打开【手机淘宝】即可查看";
+
+		return lastInfo;
 	} catch(e) {
 		console.log("【常规】数据转换为微信答复信息失败");
 	}
-	
 }
 
 var getLastInfo = function(weixinMsg, mmid) {
@@ -174,7 +194,7 @@ var getLastInfo = function(weixinMsg, mmid) {
 		var mallProductID = "";
 		var yishoudanUrl = "";
 		var picUrl = "";
-		var title = "", price = "", quanValue = "", tkl = "";
+		var title = "", price = "", quanValue = "", tkl = "", canUsedPrice = "", rate = "";
 		getThreeUrl(weixinMsg).then(function(data) {
 			//{"threeUrl": threeUrl}
 			console.log("提取微信消息：" + JSON.stringify(data));
@@ -182,6 +202,7 @@ var getLastInfo = function(weixinMsg, mmid) {
 			return getMallProductID(data.threeUrl)
 		})
 		.then(function(data) {
+			console.log("微信信息：" + weixinMsg + "\n");
 			//{"mallProductID": mallProductID}
 			console.log("商品ID：" + JSON.stringify(data));
 			console.log("\n");
@@ -205,6 +226,8 @@ var getLastInfo = function(weixinMsg, mmid) {
 			console.log("佣金信息" + JSON.stringify(data));
 			console.log("\n");
 			quanValue = data.quanValue;
+			canUsedPrice = data.canUsedPrice;
+			rate = data.rate;
 			return getTklBySdk(data.url, picUrl);
 		})
 		.then(function(data) {
@@ -213,11 +236,12 @@ var getLastInfo = function(weixinMsg, mmid) {
 			console.log("\n");
 			tkl = data.tkl;
 
-			var lastData = { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl};
-			var lastMsg = getLastResponMsg(lastData);
+			var lastData = { "title": title, "price": price, "quanValue": quanValue, "tkl": tkl, "rate": rate, "canUsedPrice": canUsedPrice };
+			var lastInfo = getLastResponMsg(lastData);
+			//{ "lastMsg": "", "lastSelfMsg": "" }
 			//console.log(lastMsg);
 			//console.log("\n");
-			resolve({"lastMsg": lastMsg});
+			resolve({"lastMsg": lastInfo.lastMsg, "lastSelfMsg": lastInfo.lastSelfMsg});
 		})
 		.catch(function(msg) {
 			rej(msg);

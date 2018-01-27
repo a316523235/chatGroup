@@ -1,0 +1,75 @@
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-s
+cale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no, email=no">
+    <title></title>
+  <script src="//g.alicdn.com/mtb/lib-callapp/1.4.8/??combo.js,callapp.js"></scr
+ipt>
+  <style>
+        body{
+            background-repeat:no-repeat;
+            background-position: left top;
+            background-color: #efeff4;
+            background-size: 100%;
+                padding: 0;
+            margin: 0;
+        }
+    </style>
+     <script>
+       //业务点code
+        var bizCode="tbshare";
+        //短地址
+        var shortName = "h.Z0XJr6x";
+        //目标地址
+        var url = 'http://item.taobao.com/item.htm?id=18057965396&systype=m&from
+=tbkfenxiangplus&fromScene=100&tbkShareId=3218410781&ali_trackid=2%3Amm_26632441
+_0_0%3A1516434571931_377_9113030369&sourceType=item&suid=ac8aabfd-1e21-4d81-a943
+-ed18916bf77a&shareid=f0e7317e-8041-43db-9532-239b283a343d&ut_sk=1.WfrmcHliWJ4DA
+C8w3dqpHmDo_21646297_1516433353366.TaoPassword-WeiXin.baobeixiangqingfenxiang&un
+=124bf522c95ab76b8011994573a7abfb&share_crt_v=1&cpp=1&shareurl=true&spm=a313p.22
+.el.90138425669&short_name=h.Z0XJr6x';
+        //短地址有问题时跳转的地址
+        var invalidUrl = "http://m.tb.cn/scanError.htm";
+        //黄金令箭埋点值
+        var ecode="ecode.2.1";
+        //短地址状态
+        var status = "true";
+                        //是否是阿里系APP访问
+                        var isAliApp = "false";
+                        //是否强制在body里插入img节点（tbshare有类似需求）
+                        var mustImg = "true";
+
+     //客户端应用信息，见App.java定义,这些变量在页面上已经用不到了，全部在java内
+部判断用了
+     var app= "";//如果是微信，需要特殊处理
+     //客户端系统信息，见OS.java定义
+     var os = "";//访问的系统
+
+                //客户端打开的方式，见xcode里Constant.java中定义
+                var appMethod="replace";
+                //selfview的模板不用在这里输出，不然会js变量冲突
+                                        var methodString="1";
+
+                //创建码时，指定码的extraStr的json字符内容，用于自定义模板页面填
+坑位用
+                                        var extraData = {"pic":"http://img.alicd
+n.com/imgextra/i1/708271284/TB2t5zvbgojyKJjy0FaXXakspXa_!!708271284.jpg","title"
+:"我剁手都要买的宝贝（LED吸顶灯长方形遥控大气客厅灯具现代简约卧室灯阳台灯餐厅灯
+饰），快来和我一起瓜分红包"};
+                       var replacedWxBgPic = ""
+
+    </script>
+</head>
+        <body><script>
+with(document)with(body)with(insertBefore(createElement("script"),firstChild))se
+tAttribute("exparams","category=&userid=&aplus&yunid=&&trid=0bb3742e151702399685
+77501e&asid=AQAAAAD88mtadHDNdgAAAAB/UYLnZrsPkQ==",id="tb-beacon-aplus",src=(loca
+tion>"https"?"//g":"//g")+".alicdn.com/alilog/mlog/aplus_v2.js")
+</script>
+
+                        </body>
+        <script type="text/javascript" src="/assets/scan.js?t=201705231430"></sc
+ript>
+</html>

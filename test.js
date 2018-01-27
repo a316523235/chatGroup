@@ -1,10 +1,10 @@
 var Promise = require('promise');
 var tbkApi = require('./tbkApi.js');
 var mmApi = require('./mmApi.js');
+var dingTalkApi = require('./dingTalkApi.js');
 
 function testTbkApi() {
-	var weixinMsg = "@吴豆子 @吴豆子 我剁手都要买的宝贝（小鹿叮叮超柔婴儿纸尿裤L120片男女宝宝透气干爽尿不湿批发包邮），";
-	weixinMsg +=  "快来和我一起瓜分红包】http://m.tb.cn/h.ZZtFUer?cv=3Sw8GMsraA&sm=523d5e 点击链接，再选择浏览器打开；或复制这条信息，打开👉手机淘宝👈￥3Sw8GMsraA￥";
+	var weixinMsg = " 【我剁手都要买的宝贝（LED吸顶灯长方形遥控大气客厅灯具现代简约卧室灯阳台灯餐厅灯饰），快来和我一起瓜分红I包】http://www.dwntme.com/h.Z0XJr6x 点击链接，再选择浏览器打开；或复制这条信息￥efM20lqldSe￥后打开👉手淘👈";
 	var mmid = "mm_25794195_41744417_186800375";
 	//getLastInfo(weixinMsg, "mm_25794195_41744417_186800375");
 	//test1(weixinMsg, "mm_25794195_41744417_186800375");
@@ -12,6 +12,8 @@ function testTbkApi() {
 		//{"lastMsg": lastMsg}
 		//console.log("最终消息：" + JSON.stringify(data));
 		console.log("最终消息：" + data.lastMsg);
+		console.log("\n\n");
+		console.log("最终自己消息：" + data.lastSelfMsg);
 		console.log("\n");
 	}).catch(function(msg) {
 		return rej(msg);
@@ -19,8 +21,9 @@ function testTbkApi() {
 }
 
 function testMmApi() {
-	console.log(mmApi.getMmByWinxinName("冰33"));
-	console.log(mmApi.getMmByWinxinGroup("一点都不黑3333"));
+	console.log(mmApi.getMmByWeixinName("冰"));
+	console.log(mmApi.getMmByWeixinMsg("@吴豆子 【我剁手都要买的宝"));
+	console.log(mmApi.getMmByWeixinGroup("一点都不黑"));
 }
 
 function testWeixinApi() {
@@ -38,6 +41,10 @@ function testWeixinApi() {
 	});
 	bot.run();
 }
+
+function testDingTalk() {
+	dingTalkApi.sendText("测试");
+}
 //testWeixinApi();
 //testTbkApi();
-testMmApi();
+testDingTalk();
