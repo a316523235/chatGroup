@@ -35,9 +35,9 @@ bot.on('group', (msg) => {
   console.log(msg.GroupMember.DisplayName);
   var isTipContent = msg.Content.indexOf("http") > -1;
 
-  var result = mmApi.addGroupByMsg(msg.Content, msg.GroupMember.NickName);
+  var result = mmApi.addGroupByMsg(msg.Content, msg.Group.NickName);
   if(result) {
-    dingTalkApi.sendText("群：【" + msg.GroupMember.NickName + "】" + result);
+    dingTalkApi.sendText("群：【" + msg.Group.NickName + "】" + result);
   }
   
   if(isTipContent) {
