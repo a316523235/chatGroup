@@ -42,7 +42,7 @@ var getMmByWeixinGroup = function(weixinGroup) {
 }
 
 var addGroupByMsg = function(weixinMsg, weixinGroup) {
-	if(weixinMsg == "加入淘客") {
+	if(weixinMsg == "我要买东西") {
 		return addGroup(weixinGroup);
 	}
 	return null;
@@ -65,7 +65,7 @@ var addGroup = function(weixinGroup) {
 }
 
 var addUserByMsg = function(weixinMsg, weixinName) {
-	if(weixinMsg == "加入淘客") {
+	if(weixinMsg == "我要买东西") {
 		return addUser(weixinName);
 	}
 	return null;

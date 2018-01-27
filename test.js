@@ -24,9 +24,9 @@ function testMmApi() {
 	console.log(mmApi.getMmByWeixinName("冰"));
 	//console.log(mmApi.getMmByWeixinMsg("@吴豆子 【我剁手都要买的宝"));
 	console.log(mmApi.getMmByWeixinGroup("一点都不黑"));
-	console.log(mmApi.addUserByMsg("加入淘客", "testUser1"));
-	console.log(mmApi.addGroupByMsg("加入淘客","testGroup1"));
-	//console.log(mmApi.addGroup("加入淘客", "testGroup2"));
+	console.log(mmApi.addUserByMsg("我要买东西", "testUser1"));
+	console.log(mmApi.addGroupByMsg("我要买东西","testGroup1"));
+	//console.log(mmApi.addGroup("我要买东西", "testGroup2"));
 	//console.log(mmApi.removeGroup("testGroup1"));
 }
 
