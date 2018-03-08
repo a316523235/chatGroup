@@ -36,6 +36,7 @@ const client = new ApiClient({
 //     });
 // }
 
+
 var getYsdUrl = function(mallProductID, mmid) {
   return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
 }
@@ -62,6 +63,23 @@ var getThreeUrl = function(msg) {
     //return threeUrl;
 }
 
+var checkAndReturnTaoBaoShare = function(msg) {
+	return new Promise(function(resolve, rej) {
+		try {
+			var isTipContent = msg.indexOf("我剁手都要买的宝贝") > -1 && (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) && msg.indexOf('￥') > -1;
+			if(isTipContent) {
+				resolve({"taobaoShareMsg": msg});
+			} else {
+				rej("【正常】该微信消息不是淘宝商品");
+			}
+		} catch(e) {
+			rej("【常规】判断微信消息不是淘宝商品失败");
+		}
+	});    
+    //console.log("(接口)第三方链接：" + threeUrl + ", 是否相等：" + (threeUrl == "http://m.tb.cn/h.ZZtFUer?cv=3Sw8GMsraA&sm=523d5e"));
+    //return threeUrl;
+}
+
 var getMallProductID = function(shortUrl) {
 	return new Promise(function(resolve, rej) {
 		request.get(shortUrl, function(err, res, body) {
@@ -74,12 +92,45 @@ var getMallProductID = function(shortUrl) {
 					resolve({"mallProductID": mallProductID});
 				} catch(e) {
 					//console.log(body);
-					resolve("【接口】获取商品ID失败");
+					rej("【接口】获取商品ID失败");
 				}
 			}
 		});
 	});
 }
+
+var getMallProductIDByTkl = function(tklContent) {
+	return new Promise(function(resolve, rej) {
+		client.execute('taobao.wireless.share.tpwd.query', {
+		    'password_content': tklContent
+		}, function(error, response) {
+		    if (error) {
+		    	rej("【接口】请求解析淘口令失败, " + error);
+		    } else {
+		    	try {
+	    			if(response && response.url) {
+		    			var pattern = /[?&]id=(\d+)&?/i;
+		    			var arr = response.url.match(pattern);
+	    				if(arr == null || arr.length != 2) {
+	    					rej("【接口】请求解析淘口令结果地址正则匹配失败");
+	    				} else {
+	    					resolve({"mallProductID": arr[1]});
+	    				}
+			    	} else {
+			    		rej("【接口】请求解析淘口令结果地址不存在: " + JSON.stringify(response));
+			    	}
+		    	} catch(e) {
+					//console.log(body);
+					rej("【接口】请求解析淘口令失败" + e);
+				}
+		    	
+		    }
+		})
+	})
+
+	
+}
+
 
 var getProductInfoBySdk = function(mallProductID) {
 	return new Promise(function(resolve, rej) {
@@ -171,8 +222,8 @@ var getLastResponMsg = function(data) {
 
 		//完整提示(仅自己)
 		if(data.quanValue > 0) {
-			lastInfo.lastSelfMsg += "【券面值】" + data.quanValue + "元\n";
-			lastInfo.lastSelfMsg += "【起用价】" + data.canUsedPrice + "元\n";
+			lastInfo.lastSelfMsg += "【券面值】 " + data.quanValue + "元\n";
+			lastInfo.lastSelfMsg += "【起用价】 " + data.canUsedPrice + "元\n";
 		}
 		lastInfo.lastSelfMsg += "【佣比例】 " + data.rate + "%\n";
 
@@ -195,11 +246,17 @@ var getLastInfo = function(weixinMsg, mmid) {
 		var yishoudanUrl = "";
 		var picUrl = "";
 		var title = "", price = "", quanValue = "", tkl = "", canUsedPrice = "", rate = "";
-		getThreeUrl(weixinMsg).then(function(data) {
-			//{"threeUrl": threeUrl}
+		// getThreeUrl(weixinMsg).then(function(data) {
+		// 	//{"threeUrl": threeUrl}
+		// 	console.log("提取微信消息：" + JSON.stringify(data));
+		// 	console.log("\n");
+		// 	return getMallProductID(data.threeUrl)
+		// })
+		checkAndReturnTaoBaoShare(weixinMsg).then(function(data) {
+			//{"taobaoShareMsg": msg}
 			console.log("提取微信消息：" + JSON.stringify(data));
 			console.log("\n");
-			return getMallProductID(data.threeUrl)
+			return getMallProductIDByTkl(data.taobaoShareMsg);
 		})
 		.then(function(data) {
 			console.log("微信信息：" + weixinMsg + "\n");
