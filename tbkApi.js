@@ -67,7 +67,7 @@ var getThreeUrl = function(msg) {
 var checkAndReturnTaoBaoShare = function(msg) {
 	return new Promise(function(resolve, rej) {
 		try {
-			var isTipContent = msg.indexOf("我剁手都要买的宝贝") > -1 && (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) && msg.indexOf('￥') > -1;
+			var isTipContent = (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) && msg.indexOf('￥') > -1;
 			if(isTipContent) {
 				resolve({"taobaoShareMsg": msg});
 			} else {
@@ -113,7 +113,7 @@ var getMallProductIDByTkl = function(tklContent) {
 		    			var pattern = /[?&]id=(\d+)&?/i;
 		    			var arr = response.url.match(pattern);
 	    				if(arr == null || arr.length != 2) {
-	    					rej("【接口】请求解析淘口令结果地址正则匹配失败");
+	    					rej("【接口】请求解析淘口令结果地址正则匹配失败, \n口令：" + tklContent + ", \n返回结果：" + JSON.stringify(response));
 	    				} else {
 	    					resolve({"mallProductID": arr[1]});
 	    				}

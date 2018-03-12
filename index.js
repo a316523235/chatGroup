@@ -13,7 +13,7 @@ bot.on('friend', (msg) =>  {
   console.log("朋友消息");
   console.log(msg.Member.NickName);
   var isSelf = msg.Member.NickName == "冰" && msg.Member.Signature == "暖心手帐";
-  var isTipContent = msg.Content.indexOf("http") > -1;
+  var isTipContent = msg.Content.indexOf("手淘") > -1;
 
   var result = mmApi.addUserByMsg(msg.Content, msg.Member.NickName);
   if(result) {
@@ -33,7 +33,7 @@ bot.on('group', (msg) => {
   //console.log(msg);
   console.log(msg.Group.NickName);
   console.log(msg.GroupMember.DisplayName);
-  var isTipContent = msg.Content.indexOf("http") > -1;
+  var isTipContent = msg.Content.indexOf("手淘") > -1;
 
   var result = mmApi.addGroupByMsg(msg.Content, msg.Group.NickName);
   if(result) {

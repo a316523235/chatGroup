@@ -3,7 +3,9 @@
     {
       "name": "API1.0__自己",
       "weixinName": "---冰---",
-      "weixinUsers": [],
+      "weixinUsers": [
+        "冰"
+      ],
       "weixinGroups": [
         "亲情聊天",
         "亲情自家群"
