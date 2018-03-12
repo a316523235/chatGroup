@@ -38,7 +38,8 @@ const client = new ApiClient({
 
 
 var getYsdUrl = function(mallProductID, mmid) {
-  return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
+  //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
+  return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
 }
 
 var getThreeUrl = function(msg) {
