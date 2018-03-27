@@ -53,7 +53,8 @@ var responseWeixinMsg = function(msg, mm, isSelf) {
   var sendTo = isSelf ? msg.ToUserName : msg.FromUserName;
   tbkApi.getLastInfo(msg.Content, mm.mmid)
   .then(function(data) {
-    bot.sendText(sendTo, data.lastMsg);
+    //bot.sendText(sendTo, data.lastMsg);
+    bot.sendText(sendTo, data.lastSelfMsg);
     dingTalkApi.sendText(data.lastSelfMsg);
   })
   .catch(function(errMsg) {
