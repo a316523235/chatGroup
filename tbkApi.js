@@ -113,7 +113,13 @@ var getMallProductIDByTkl = function(tklContent) {
 		    			var pattern = /[?&]id=(\d+)&?/i;
 		    			var arr = response.url.match(pattern);
 	    				if(arr == null || arr.length != 2) {
-	    					rej("【接口】请求解析淘口令结果地址正则匹配失败, \n口令：" + tklContent + ", \n返回结果：" + JSON.stringify(response));
+    						pattern = /i(\d+).htm/i;
+							arr = response.url.match(pattern);
+							if(arr == null || arr.length != 2) {
+	    						rej("【接口】请求解析淘口令结果地址正则匹配失败, \n口令：" + tklContent + ", \n返回结果：" + JSON.stringify(response));
+    						} else {
+    							resolve({"mallProductID": arr[1]});
+    						}
 	    				} else {
 	    					resolve({"mallProductID": arr[1]});
 	    				}
