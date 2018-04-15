@@ -39,7 +39,8 @@ const client = new ApiClient({
 
 var getYsdUrl = function(mallProductID, mmid) {
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
-  return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
+  //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
+  return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002100827678567e01c938939df8b03620cae1064a16666688b931fec47fda987f6221598668909';
 }
 
 var getThreeUrl = function(msg) {
@@ -169,9 +170,11 @@ var getCommissionInfoByYsd = function(yishoudanUrl) {
 			} else {
 				var data = {};
 				try {
-					data = JSON.parse(body);
-					if(data && data.url) {
-						resolve({url: data.url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
+					data = JSON.parse(body).tbk_privilege_get_response.result.data;
+					//if(data && data.url) {
+					if(data && data.coupon_click_url) {
+						//resolve({url: data.url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
+						resolve({url: data.coupon_click_url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
 					} else {
 						rej("【接口】转链json信息中未包含链接地址，原始信息" + body);
 					}

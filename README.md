@@ -177,3 +177,10 @@ client.execute('taobao.tbk.tpwd.create', {
 }
 
 1598668909
+
+{"tbk_privilege_get_response":{"re
+sult":{"data":{"category_id":122950001,"coupon_click_url":"https:\/\/uland.taoba
+o.com\/coupon\/edetail?e=p44yuxn9AxYGQASttHIRqfUSqgR%2F8XwIJMHKHJWRAahkrBtp0jqDE
+DOzByARy1khXiJ0CWofLpLkZct%2FkzjlML9fwBwwUiqluhHkHy0c%2F1f5P4Q5WAVSX27PVn13QcLNc
+ISolD8QJ4or%2FU1KmdMVhQ%3D%3D&traceId=0b8f0d8215238030922602828","item_id":53932
+4072168,"max_commission_rate":"5.00"}},"request_id":"ddbpyni35wn9"}}
