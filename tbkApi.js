@@ -294,7 +294,9 @@ var getLastInfo = function(weixinMsg, mmid) {
 			console.log("\n");
 			quanValue = data.quanValue;
 			canUsedPrice = data.canUsedPrice;
-			rate = data.rate;
+			var newRate = Math.floor((data.rate.replace("%", "") * 0.5) * 10) / 10;
+		    //rate = data.rate;
+			rate = newRate;
 			return getTklBySdk(data.url, picUrl);
 		})
 		.then(function(data) {
