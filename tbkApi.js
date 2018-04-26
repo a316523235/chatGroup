@@ -170,11 +170,22 @@ var getCommissionInfoByYsd = function(yishoudanUrl) {
 			} else {
 				var data = {};
 				try {
+					console.log(body);
 					data = JSON.parse(body).tbk_privilege_get_response.result.data;
 					//if(data && data.url) {
 					if(data && data.coupon_click_url) {
 						//resolve({url: data.url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
-						resolve({url: data.coupon_click_url, rate: data.max_commission_rate, canUsedPrice: data.info1, quanValue: data.quan});
+						//{"category_id":50022517,"coupon_click_url":"https:\/\/uland.taobao.com\/coupon\/edetail?e=E2QcweLePzYGQASttHIRqbLXk8SFYQpP468essHalZhkrBtp0jqDEDOzByARy1khXiJ0CWofLpLkZct%2FkzjlML9fwBwwUiqluhHkHy0c%2F1f5P4Q5WAVSX27PVn13QcLNcISolD8QJ4oZ69MURWX%2F6Q%3D%3D&traceId=0bba16b415247584272712895","coupon_end_time":"2018-05-31","coupon_info":"满200元减50元","coupon_remain_count":83,"coupon_start_time":"2018-04-11","coupon_total_count":100,"coupon_type":3,"item_id":566682571042,"max_commission_rate":"5.00"}
+						var canUsedPrice = null, quanValue = null;
+						if(data.coupon_info)
+						{
+							var arr = data.coupon_info.match(/\d+/g);
+							if(arr && arr.length == 2) {
+								canUsedPrice = arr[0];
+								quanValue = arr[1];
+							}
+						}
+						resolve({url: data.coupon_click_url, rate: data.max_commission_rate, canUsedPrice: canUsedPrice, quanValue: quanValue});
 					} else {
 						rej("【接口】转链json信息中未包含链接地址，原始信息" + body);
 					}
