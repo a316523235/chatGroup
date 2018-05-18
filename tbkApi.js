@@ -40,7 +40,7 @@ const client = new ApiClient({
 var getYsdUrl = function(mallProductID, mmid) {
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
-  return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002100827678567e01c938939df8b03620cae1064a16666688b931fec47fda987f6221598668909';
+  return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002100625f167a89d9aa917cdb071d88bea1d520e4041080a7bb6cf2b8d6078a4c86c1598668909';
 }
 
 var getThreeUrl = function(msg) {
