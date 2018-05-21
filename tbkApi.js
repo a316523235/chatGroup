@@ -68,7 +68,8 @@ var getThreeUrl = function(msg) {
 var checkAndReturnTaoBaoShare = function(msg) {
 	return new Promise(function(resolve, rej) {
 		try {
-			var isTipContent = (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) && msg.indexOf('￥') > -1;
+			//msg = msg.replace(new RegExp("《","gm"), '￥');
+			var isTipContent = (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) &&  (msg.indexOf('￥') > -1 || msg.indexOf('《') > -1);
 			if(isTipContent) {
 				resolve({"taobaoShareMsg": msg});
 			} else {
