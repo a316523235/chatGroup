@@ -69,7 +69,7 @@ var checkAndReturnTaoBaoShare = function(msg) {
 	return new Promise(function(resolve, rej) {
 		try {
 			//msg = msg.replace(new RegExp("《","gm"), '￥');
-			var isTipContent = (msg.indexOf('手淘') > -1 || msg.indexOf('手机淘宝') > -1) &&  (msg.indexOf('￥') > -1 || msg.indexOf('《') > -1);
+			var isTipContent = msg.indexOf('淘') > -1 &&  (msg.indexOf('￥') > -1 || msg.indexOf('《') > -1);
 			if(isTipContent) {
 				resolve({"taobaoShareMsg": msg});
 			} else {
