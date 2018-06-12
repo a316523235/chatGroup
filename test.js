@@ -8,7 +8,7 @@ function testTbkApi() {
 	//var weixinMsg = "【我剁手都要买的宝贝（bebivita婴儿床实木无漆宝宝bb床摇篮床多功能儿童新生儿拼接大床），快来和我一起瓜分红I包】，复制这条信息￥zjHn0ofLJFg￥后打开👉手淘👈";
 	//var weixinMsg = "【结婚用品喜糖盒子创意婚庆糖盒喜糖袋中式喜糖礼盒婚礼喜糖盒批發】，复制这条信息￥4NLL0p3iEVN￥后打开<span class=\"emoji emoji1f449\"></span>手淘<span class=\"emoji emoji1f448\"></span>";
 	//var weixinMsg = "【我剁手都要买的宝贝（结婚用品喜糖盒子创意婚庆糖盒喜糖袋中式喜糖礼盒婚礼喜糖盒批發），快来和我一起瓜分红I包】，复制这条信息￥bySf0uAXe10￥后打开👉手淘👈";
-	var weixinMsg = "【汽车led倒车灯超亮流氓灯改装车尾灯鹰眼灯辅助灯解码led倒车灯泡】http://m.tb.cn/h.WAH0Tt6 点击链接，再选择浏览器打开；或复制这条信息￥rWsU0vz8tSs￥后打开👉淘宝👈";
+	var weixinMsg = "【洗车水枪家用高压伸缩水管软管冲车神器水抢头喷头浇花工具套装】，復·制这段描述€UWiN0xenlAd€后到👉淘♂寳♀👈";
 	var mmid = "mm_119516089_19314614_312936238";
 	//getLastInfo(weixinMsg, "mm_25794195_41744417_186800375");
 	//test1(weixinMsg, "mm_25794195_41744417_186800375");
