@@ -150,7 +150,11 @@ var getProductInfoBySdk = function(mallProductID) {
 			'num_iids': mallProductID
 	    }, function (error,response) {
 	    	if(error) {
-	    		rej("【接口】请求商品信息SDK失败");
+	    		if(error.code == 15 && error.sub_code == '50001') {
+	    			rej("【提示】该商品无优惠信息, 建议人工二次确认");
+	    		} else {
+	    			rej("【接口】请求商品信息SDK失败" + mallProductID);
+	    		}
 	    	} else {
 	    		if(response.results.n_tbk_item && response.results.n_tbk_item.length > 0) {
 	    			var item = response.results.n_tbk_item[0];
