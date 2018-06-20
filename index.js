@@ -33,7 +33,7 @@ bot.on('group', (msg) => {
   //console.log(msg);
   console.log(msg.Group.NickName);
   console.log(msg.GroupMember.DisplayName);
-  var isTipContent = msg.Content.indexOf("手淘") > -1;
+  var isTipContent = msg.Content.indexOf("淘") > -1;
 
   var result = mmApi.addGroupByMsg(msg.Content, msg.Group.NickName);
   if(result) {
