@@ -38,9 +38,12 @@ const client = new ApiClient({
 
 
 var getYsdUrl = function(mallProductID, mmid) {
+  pid = 'mm_119516089_19314614_312936238';
+  var session = '7000210023174d014b088d4c81b95ca6a4dc8bfe2b51049858623d90af839aa6880c9541598668909';
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
-  return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002101150903585ce820156f1ed622f1f749a7cae395ebb98f8c4179993d1d62febfc1598668909';
+  //return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002101150903585ce820156f1ed622f1f749a7cae395ebb98f8c4179993d1d62febfc1598668909';
+  return 'http://gy.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&pid=' + pid + '&session=' + session;
 }
 
 var getThreeUrl = function(msg) {
