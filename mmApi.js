@@ -14,7 +14,7 @@ var getMmByWeixinName = function(weixinName) {
 			return mm;
 		}
 	}
-	return null;
+	return getSelf();
 }
 
 // var getMmByWeixinMsg = function(weixinMsg) {

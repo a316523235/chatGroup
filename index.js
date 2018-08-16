@@ -7,50 +7,41 @@ var tbkApi = require('./tbkApi.js');
 var mmApi = require('./mmApi.js');
 var dingTalkApi = require('./dingTalkApi.js');
 
+function isTip(str) {
+  return str.indexOf("淘") > -1;
+}
+
 var bot = new Weixinbot();
 bot.on('qrcode', dingTalkApi.sendPicture);
 bot.on('friend', (msg) =>  {
-  console.log("朋友消息");
-  console.log(msg.Member.NickName);
+  //console.log("朋友消息");
+  //console.log(msg.Member.NickName);
   var isSelf = msg.Member.NickName == "冰" && msg.Member.Signature == "暖心手帐";
-  var isTipContent = msg.Content.indexOf("淘") > -1;
-
-  var result = mmApi.addUserByMsg(msg.Content, msg.Member.NickName);
-  if(result) {
-    dingTalkApi.sendText("用户：【" + msg.Member.NickName + "】" + result);
-  }
+  var isTipContent = isTip(msg.Content);
 
   if(isTipContent) {
     var mm = mmApi.getMmByWeixinName(msg.Member.NickName);
-    if(mm) {
-      responseWeixinMsg(msg, mm, isSelf);
-    }
+    responseWeixinMsg(msg, mm, isSelf);
   }
 })
 
 bot.on('group', (msg) => {
-  console.log("群消息");
+  //console.log("群消息");
   //console.log(msg);
-  console.log(msg.Group.NickName);
-  console.log(msg.GroupMember.DisplayName);
-  var isTipContent = msg.Content.indexOf("淘") > -1;
-
-  var result = mmApi.addGroupByMsg(msg.Content, msg.Group.NickName);
-  if(result) {
-    dingTalkApi.sendText("群：【" + msg.Group.NickName + "】" + result);
-  }
+  //console.log(msg.Group.NickName);
+  //console.log(msg.GroupMember.DisplayName);
+  var isTipContent = isTip(msg.Content);
   
   if(isTipContent) {
     var mm = mmApi.getMmByWeixinGroup(msg.Group.NickName);
-    if(mm) {
-      responseWeixinMsg(msg, mm, false);
-    }
+    responseWeixinMsg(msg, mm, false);
   }
 });
 bot.run();
 
 var responseWeixinMsg = function(msg, mm, isSelf) {
-  var sendTo = isSelf ? msg.ToUserName : msg.FromUserName;
+  //var sendTo = isSelf ? msg.ToUserName : msg.FromUserName;
+  var sendTo = msg.FromUserName;
   tbkApi.getLastInfo(msg.Content, mm.mmid)
   .then(function(data) {
     //bot.sendText(sendTo, data.lastMsg);
