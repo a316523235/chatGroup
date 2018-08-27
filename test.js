@@ -8,7 +8,7 @@ function testTbkApi() {
 	//var weixinMsg = "【我剁手都要买的宝贝（bebivita婴儿床实木无漆宝宝bb床摇篮床多功能儿童新生儿拼接大床），快来和我一起瓜分红I包】，复制这条信息￥zjHn0ofLJFg￥后打开👉手淘👈";
 	//var weixinMsg = "【结婚用品喜糖盒子创意婚庆糖盒喜糖袋中式喜糖礼盒婚礼喜糖盒批發】，复制这条信息￥4NLL0p3iEVN￥后打开<span class=\"emoji emoji1f449\"></span>手淘<span class=\"emoji emoji1f448\"></span>";
 	//var weixinMsg = "【我剁手都要买的宝贝（结婚用品喜糖盒子创意婚庆糖盒喜糖袋中式喜糖礼盒婚礼喜糖盒批發），快来和我一起瓜分红I包】，复制这条信息￥bySf0uAXe10￥后打开👉手淘👈";
-	var weixinMsg = "【usb婴儿推车小风扇迷你可充电学生宿舍大风力床上头挂bb宝宝不伤手无声超静音桌面便携随身电池小型夹式电扇】http://m.tb.cn/h.3173wuR 点击链接，再选择浏览器咑閞；或復·制这段描述€7gD10zsWDSk€后到👉淘♂寳♀👈";
+	var weixinMsg = "【usb婴儿推车小风扇迷你可充电学生宿舍大风力床上头挂bb宝宝不伤手无声超静音桌面便携随身电池小型夹式电扇】http://m.tb.cn/h.3173wuR 点击链接，再选择浏览器咑閞；或復·制这段描述€17FFbdcjjdc€后到👉淘♂寳♀👈";
 	var mmid = "mm_119516089_19314614_312936238";
 	//getLastInfo(weixinMsg, "mm_25794195_41744417_186800375");
 	//test1(weixinMsg, "mm_25794195_41744417_186800375");
