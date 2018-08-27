@@ -11,8 +11,9 @@ var bot = new Weixinbot();
 bot.on('qrcode', dingTalkApi.sendPicture);
 bot.on('friend', (msg) =>  {
   console.log("朋友消息");
-  console.log(msg.Member.NickName);
-  var isSelf = msg.Member.NickName == "冰" && msg.Member.Signature == "暖心手帐";
+  console.log('---' + msg.Member.NickName + '---');
+  //var isSelf = msg.Member.NickName == "冰" && msg.Member.Signature == "暖心手帐";
+  var isSelf = msg.Member.Signature == "暖心手帐";
   var isTipContent = msg.Content.indexOf("淘") > -1;
 
   var result = mmApi.addUserByMsg(msg.Content, msg.Member.NickName);
@@ -22,6 +23,9 @@ bot.on('friend', (msg) =>  {
 
   if(isTipContent) {
     var mm = mmApi.getMmByWeixinName(msg.Member.NickName);
+    if(isSelf) {
+      mm = mmApi.getSelf();
+    }
     if(mm) {
       responseWeixinMsg(msg, mm, isSelf);
     }
@@ -43,6 +47,7 @@ bot.on('group', (msg) => {
   if(isTipContent) {
     var mm = mmApi.getMmByWeixinGroup(msg.Group.NickName);
     if(mm) {
+      console.log('hell send');
       responseWeixinMsg(msg, mm, false);
     }
   }
@@ -56,8 +61,9 @@ var responseWeixinMsg = function(msg, mm, isSelf) {
     //bot.sendText(sendTo, data.lastMsg);
     bot.sendText(sendTo, data.lastSelfMsg);
     dingTalkApi.sendText(data.lastSelfMsg);
-  })
+  })  
   .catch(function(errMsg) {
+    console.log(errMsg);
     if(errMsg.indexOf("【提示】") > -1) {
       bot.sendText(sendTo, errMsg);
     } else {
