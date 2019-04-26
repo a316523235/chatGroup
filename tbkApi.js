@@ -39,7 +39,7 @@ const client = new ApiClient({
 
 var getYsdUrl = function(mallProductID, mmid) {
   pid = 'mm_119516089_19314614_312936238';
-  var session = '70002100e0297112b44ef4926af2ae8081c4fe6888f6682b1af709b0789385a05f956db1598668909';
+  var session = '70002100c2944973c5c59b7711e733f81ef26a7f113eed1fcd97ba4eb86f7e9707073921598668909';
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/409468254/num_iid/' + mallProductID + '/pid/' + mmid;
   //return 'http://api.yishoudan.com/newapi/gysq/taobao_user_id/1598668909/num_iid/' + mallProductID + '/pid/' + mmid;
   //return 'http://api.yishoudan.com/ysd_api.php?item_id=' + mallProductID + '&adzone_id=312936238&site_id=19314614&session=70002101150903585ce820156f1ed622f1f749a7cae395ebb98f8c4179993d1d62febfc1598668909';
